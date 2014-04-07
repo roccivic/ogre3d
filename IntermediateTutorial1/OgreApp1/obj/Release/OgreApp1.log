@@ -1,0 +1,24 @@
+﻿Build started 07/04/2014 23:47:44.
+     1>Project "C:\Users\User\Desktop\Ogre\IntermediateTutorial1\OgreApp1\OgreApp1.vcxproj" on node 2 (build target(s)).
+     1>InitializeBuildStatus:
+         Creating "obj\Release\OgreApp1.unsuccessfulbuild" because "AlwaysCreate" was specified.
+       ClCompile:
+         All outputs are up-to-date.
+       ResourceCompile:
+         All outputs are up-to-date.
+       Link:
+         All outputs are up-to-date.
+         OgreApp1.vcxproj -> C:\Users\User\Desktop\Ogre\IntermediateTutorial1\OgreApp1\bin\Release\OgreApp1.exe
+       PostBuildEvent:
+         Description: Copying exe to samples bin directory ...
+         copy "bin\Release\\OgreApp1.exe" "C:\OgreSDK_vc10_v1-8-1\Bin\Release"
+         :VCEnd
+                 1 file(s) copied.
+       FinalizeBuildStatus:
+         Deleting file "obj\Release\OgreApp1.unsuccessfulbuild".
+         Touching "obj\Release\OgreApp1.lastbuildstate".
+     1>Done Building Project "C:\Users\User\Desktop\Ogre\IntermediateTutorial1\OgreApp1\OgreApp1.vcxproj" (build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:00.21
