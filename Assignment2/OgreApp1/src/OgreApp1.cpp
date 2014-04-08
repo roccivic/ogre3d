@@ -1,4 +1,5 @@
 #include "OgreApp1.h"
+#include "Floor.h"
 
 //-------------------------------------------------------------------------------------
 OgreApp1::OgreApp1(void)
@@ -53,39 +54,9 @@ void OgreApp1::createScene(void)
 	nodOpponent->attachObject(entOpponent);
 	nodOpponent->translate(Ogre::Vector3(400, 25, -400));
  
-	mSceneMgr->getRootSceneNode()->createChildSceneNode("floor");
-	Ogre::String names[5][5] = {
-		{"F11","F21","F31","F41","F51"},
-	    {"F12","F22","F32","F42","F52"},
-	    {"F13","F23","F33","F43","F53"},
-	    {"F14","F24","F34","F44","F54"},
-	    {"F15","F25","F35","F45","F55"}
-	};
-	for (int x=0; x<5; x++) {
-		for (int z=0; z<5; z++) {
-			Ogre::Vector3 transVector = Ogre::Vector3(200*x-400, 0, 200*z-400);
-			makePlane(names[x][z], transVector);
-		}
-	}
- 
-    Ogre::Light* pointLight = mSceneMgr->createLight("pointLight");
-    pointLight->setType(Ogre::Light::LT_POINT);
-    pointLight->setPosition(Ogre::Vector3(0, 150, 0));
- 
-    pointLight->setDiffuseColour(1.0, 0.5, 0.5);
-    pointLight->setSpecularColour(1.0, 0.5, 0.5);
-}
-
-void OgreApp1::makePlane(const Ogre::String name, Ogre::Vector3 transVector) {
-	Ogre::Plane plane(Ogre::Vector3::UNIT_Y, 0);
-    Ogre::MeshManager::getSingleton().createPlane("ground", Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME,
-        plane, 200, 200, 2, 2, true, 1, 1, 1, Ogre::Vector3::UNIT_Z);
-    Ogre::Entity* entGround = mSceneMgr->createEntity(name, "ground");
-    Ogre::SceneNode *floorPiece = mSceneMgr->getSceneNode("floor")->createChildSceneNode();
-	floorPiece->translate(transVector);
-	floorPiece->attachObject(entGround);
-    entGround->setMaterialName("Examples/RustySteel");
-    entGround->setCastShadows(false);
+	Floor* floor = new Floor(mSceneMgr);
+	floor->makeFloor();
+	delete floor;
 }
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32

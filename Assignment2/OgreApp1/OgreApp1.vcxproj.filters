@@ -24,12 +24,18 @@
     <ClInclude Include="res\Resource.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\Floor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\OgreApp1.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\BaseApplication.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Floor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

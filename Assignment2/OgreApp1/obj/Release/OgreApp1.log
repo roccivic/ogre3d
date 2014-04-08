@@ -1,10 +1,10 @@
-﻿Build started 08/04/2014 16:15:55.
+﻿Build started 08/04/2014 23:39:43.
      1>Project "C:\Users\User\Desktop\Ogre\Assignment2\OgreApp1\OgreApp1.vcxproj" on node 2 (build target(s)).
      1>InitializeBuildStatus:
          Creating "obj\Release\OgreApp1.unsuccessfulbuild" because "AlwaysCreate" was specified.
        ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /Iinclude /I"C:\OgreSDK_vc10_v1-8-1\include" /I"C:\OgreSDK_vc10_v1-8-1\include\OIS" /I"C:\OgreSDK_vc10_v1-8-1\include\OGRE" /I"C:\OgreSDK_vc10_v1-8-1\Samples\Common\include" /I"C:\OgreSDK_vc10_v1-8-1\boost" /Zi /nologo /W3 /WX- /O2 /Ob1 /Oi /Ot /Oy /GL /D WIN32 /D NDEBUG /D _WINDOWS /D _MBCS /GF /Gm /EHsc /MD /GS- /Gy /fp:fast /Zc:wchar_t /Zc:forScope /GR /Fo"obj\Release\\" /Fd"obj\Release\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt src\OgreApp1.cpp
-         OgreApp1.cpp
+         C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /Iinclude /I"C:\OgreSDK_vc10_v1-8-1\include" /I"C:\OgreSDK_vc10_v1-8-1\include\OIS" /I"C:\OgreSDK_vc10_v1-8-1\include\OGRE" /I"C:\OgreSDK_vc10_v1-8-1\Samples\Common\include" /I"C:\OgreSDK_vc10_v1-8-1\boost" /Zi /nologo /W3 /WX- /O2 /Ob1 /Oi /Ot /Oy /GL /D WIN32 /D NDEBUG /D _WINDOWS /D _MBCS /GF /Gm /EHsc /MD /GS- /Gy /fp:fast /Zc:wchar_t /Zc:forScope /GR /Fo"obj\Release\\" /Fd"obj\Release\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt src\Floor.cpp
+         Floor.cpp
      1>c:\ogresdk_vc10_v1-8-1\include\ogre\OgreString.h(195): warning C4251: 'Ogre::StringUtil::BLANK' : class 'std::basic_string<_Elem,_Traits,_Ax>' needs to have dll-interface to be used by clients of class 'Ogre::StringUtil'
                  with
                  [
@@ -3403,6 +3403,7 @@
        Link:
          C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"bin\Release\\OgreApp1.exe" /INCREMENTAL:NO /NOLOGO /LIBPATH:"C:\OgreSDK_vc10_v1-8-1\lib\release" /LIBPATH:"C:\OgreSDK_vc10_v1-8-1\boost\lib" OgreMain.lib OIS.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /ManifestFile:"obj\Release\OgreApp1.exe.intermediate.manifest" /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /PDB:"C:\Users\User\Desktop\Ogre\Assignment2\OgreApp1\bin\Release\OgreApp1.pdb" /SUBSYSTEM:WINDOWS /OPT:REF /OPT:ICF /LTCG /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"bin\Release\OgreApp1.lib" /MACHINE:X86 obj\Release\OgreApp1.res
          obj\Release\BaseApplication.obj
+         obj\Release\Floor.obj
          obj\Release\OgreApp1.obj
          Generating code
          Finished generating code
@@ -3421,4 +3422,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:28.27
+Time Elapsed 00:00:32.25
