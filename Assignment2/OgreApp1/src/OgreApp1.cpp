@@ -77,22 +77,27 @@ bool OgreApp1::keyPressed( const OIS::KeyEvent& evt ) {
 		case OIS::KC_W:
 			player->keyUp();
 			break;
-
 		case OIS::KC_DOWN:
 		case OIS::KC_S:
 			player->keyDown();
 			break;
- 
 		case OIS::KC_LEFT:
 		case OIS::KC_A:
 			player->keyLeft();
 			break;
- 
 		case OIS::KC_RIGHT:
 		case OIS::KC_D:
 			player->keyRight();
 			break;
-
+		case OIS::KC_1:
+			player->character1();
+			break;
+		case OIS::KC_2:
+			player->character2();
+			break;
+		case OIS::KC_3:
+			player->character3();
+			break;
 		default:
 			break;
     }
