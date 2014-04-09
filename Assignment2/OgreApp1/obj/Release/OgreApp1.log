@@ -1,4 +1,4 @@
-﻿Build started 09/04/2014 18:07:59.
+﻿Build started 09/04/2014 19:12:03.
      1>Project "C:\Users\User\Desktop\Ogre\Assignment2\OgreApp1\OgreApp1.vcxproj" on node 2 (build target(s)).
      1>InitializeBuildStatus:
          Touching "obj\Release\OgreApp1.unsuccessfulbuild".
@@ -3405,6 +3405,7 @@
          obj\Release\BaseApplication.obj
          obj\Release\Floor.obj
          obj\Release\OgreApp1.obj
+         obj\Release\Player.obj
          Generating code
          Finished generating code
          OgreApp1.vcxproj -> C:\Users\User\Desktop\Ogre\Assignment2\OgreApp1\bin\Release\OgreApp1.exe
@@ -3422,4 +3423,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:36.50
+Time Elapsed 00:00:33.95

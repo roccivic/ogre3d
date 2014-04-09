@@ -3,7 +3,6 @@
 
 OgreApp1::OgreApp1(void) {
 	timerForSquares = 0.5;
-	rotated = false;
 }
  
 OgreApp1::~OgreApp1(void) {
@@ -31,24 +30,8 @@ void OgreApp1::createViewports(void) {
 
 void OgreApp1::createScene(void) {
 	mSceneMgr->setSkyBox(true, "Examples/SpaceSkyBox", 5000, false);
-    mSceneMgr->setAmbientLight(Ogre::ColourValue(0.3, 0.3, 0.3));
+    mSceneMgr->setAmbientLight(Ogre::ColourValue(0.4, 0.4, 0.4));
     mSceneMgr->setShadowTechnique(Ogre::SHADOWTYPE_STENCIL_MODULATIVE);
- 
-    mPlayer = mSceneMgr->createEntity("Player", "ninja.mesh");
-    mPlayer->setCastShadows(true);
-	mPlayerNode = mSceneMgr->getRootSceneNode()->createChildSceneNode("PlayerNode");
-	mPlayerNode->attachObject(mPlayer);
-	mPlayerNode->translate(Ogre::Vector3(-400, 0, 400));
-
-	Ogre::Light* spotLight = mSceneMgr->createLight("PlayerLight");
-    spotLight->setType(Ogre::Light::LT_SPOTLIGHT);
-    spotLight->setDiffuseColour(0.1, 1.0, 0.1);
-    spotLight->setSpecularColour(0.1, 1.0, 0.1);
-    spotLight->setDirection(0, -1, 0);
-    spotLight->setPosition(Ogre::Vector3(0, 300, 0));
-    spotLight->setSpotlightRange(Ogre::Degree(35), Ogre::Degree(35));
-	mPlayerNode->attachObject(spotLight);
-
 
     Ogre::Entity* entOpponent = mSceneMgr->createEntity("Opponent", "penguin.mesh");
     entOpponent->setCastShadows(true);
@@ -65,6 +48,8 @@ void OgreApp1::createScene(void) {
 	nodOpponent->attachObject(spotLight2);
 	floor = new Floor(mSceneMgr);
 	floor->makeFloor();
+	player = new Player(mSceneMgr);
+	player->makePlayer();
 }
 
 void OgreApp1::createFrameListener(void) {
@@ -73,11 +58,10 @@ void OgreApp1::createFrameListener(void) {
 
 bool OgreApp1::frameRenderingQueued(const Ogre::FrameEvent& evt) {
     bool ret = BaseApplication::frameRenderingQueued(evt);
- 	mPlayerAnimation = mPlayer->getAnimationState("Idle2");
-    mPlayerAnimation->setLoop(true);
-    mPlayerAnimation->setEnabled(true);
+	player->tick(evt);
 	mDetailsPanel->setParamValue(0, "Ninja");
-	mPlayerAnimation->addTime(evt.timeSinceLastFrame);
+	mDetailsPanel->setParamValue(1, "Jaiqua");
+	mDetailsPanel->setParamValue(2, "Robot");
 	timerForSquares -= evt.timeSinceLastFrame;
 	if (timerForSquares < 0) {
 		timerForSquares = 0.5;
@@ -88,45 +72,30 @@ bool OgreApp1::frameRenderingQueued(const Ogre::FrameEvent& evt) {
 
 // OIS::KeyListener
 bool OgreApp1::keyPressed( const OIS::KeyEvent& evt ) {
-	Ogre::Vector3 transVector = Ogre::Vector3::ZERO;
-	Ogre::Degree rotateDegree = Ogre::Degree(0);
     switch (evt.key) {
 		case OIS::KC_UP:
 		case OIS::KC_W:
-			if (! rotated) {
-				transVector = Ogre::Vector3(0,0,-200);
-			} else {
-				transVector = Ogre::Vector3(0,0,-282.8427);
-			}
+			player->keyUp();
 			break;
 
 		case OIS::KC_DOWN:
 		case OIS::KC_S:
-			if (! rotated) {
-				transVector = Ogre::Vector3(0,0,200);
-			} else {
-				transVector = Ogre::Vector3(0,0,282.8427);
-			}
+			player->keyDown();
 			break;
  
 		case OIS::KC_LEFT:
 		case OIS::KC_A:
-			rotated = !rotated;
-			rotateDegree = Ogre::Degree(45);
+			player->keyLeft();
 			break;
  
 		case OIS::KC_RIGHT:
 		case OIS::KC_D:
-			rotated = !rotated;
-			rotateDegree = Ogre::Degree(-45);
+			player->keyRight();
 			break;
 
 		default:
 			break;
     }
-	mSceneMgr->getSceneNode("PlayerNode")->yaw(rotateDegree);
-	mSceneMgr->getSceneNode("PlayerNode")->translate(transVector, Ogre::Node::TS_LOCAL);
-
     return true;
 }
 

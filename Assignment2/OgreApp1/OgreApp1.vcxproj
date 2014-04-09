@@ -117,12 +117,14 @@
     <ClInclude Include="include\BaseApplication.h" />
     <ClInclude Include="include\Floor.h" />
     <ClInclude Include="include\OgreApp1.h" />
+    <ClInclude Include="include\Player.h" />
     <ClInclude Include="res\Resource.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\BaseApplication.cpp" />
     <ClCompile Include="src\Floor.cpp" />
     <ClCompile Include="src\OgreApp1.cpp" />
+    <ClCompile Include="src\Player.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="docs\ReadMe.txt" />

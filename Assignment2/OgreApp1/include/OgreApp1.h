@@ -3,6 +3,7 @@
 
 #include "BaseApplication.h"
 #include "Floor.h"
+#include "Player.h"
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
 #include "../res/resource.h"
 #endif
@@ -27,16 +28,9 @@ protected:
     virtual bool mousePressed( const OIS::MouseEvent& evt, OIS::MouseButtonID id );
     virtual bool mouseReleased( const OIS::MouseEvent& evt, OIS::MouseButtonID id );
 private:
-
-	Ogre::AnimationState *mPlayerAnimation;      // The current animation state of the object
-    Ogre::Entity *mPlayer;                       // The Entity we are animating
-    Ogre::SceneNode *mPlayerNode;                // The SceneNode that the Entity is attached to
-
 	Ogre::Real timerForSquares;
-
 	Floor* floor;
-
-	bool rotated;
+	Player* player;
 };
 
 #endif // #ifndef __OgreApp1_h_

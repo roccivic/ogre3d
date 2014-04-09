@@ -132,7 +132,9 @@ void BaseApplication::createFrameListener(void)
 
     // create a params panel for displaying sample details
     Ogre::StringVector items;
-    items.push_back("Player");
+    items.push_back("1");
+    items.push_back("2");
+    items.push_back("3");
 
     mDetailsPanel = mTrayMgr->createParamsPanel(OgreBites::TL_TOPRIGHT, "DetailsPanel", 200, items);
 
