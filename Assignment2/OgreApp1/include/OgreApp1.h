@@ -16,7 +16,15 @@ protected:
 	virtual void createScene(void);
 	virtual void createCamera(void);
 	virtual void createViewports(void);
-	void makePlane(const Ogre::String name, Ogre::Vector3 transVector);
+    virtual void createFrameListener(void);
+	virtual bool frameRenderingQueued(const Ogre::FrameEvent& evt);
+
+private:
+    bool processUnbufferedInput(const Ogre::FrameEvent& evt);
+
+	Ogre::AnimationState *mPlayerAnimation;      // The current animation state of the object
+    Ogre::Entity *mPlayer;                       // The Entity we are animating
+    Ogre::SceneNode *mPlayerNode;                // The SceneNode that the Entity is attached to
 };
 
 #endif // #ifndef __OgreApp1_h_

@@ -38,7 +38,7 @@ void Floor::makeFloor() {
 			);
 			Ogre::Light* spotLight = makeSpotlight(
 				spotlightNames[x][z],
-				Ogre::Vector3(200*x-175, 200, 200*z-400)
+				Ogre::Vector3(200*x-400, 300, 200*z-400)
 			);
 			int index = x*5+z;
 			if (index == random1 || index == random2) {
@@ -55,16 +55,16 @@ Ogre::Light* Floor::makeSpotlight(const Ogre::String name, Ogre::Vector3 transVe
     spotLight->setType(Ogre::Light::LT_SPOTLIGHT);
     spotLight->setDiffuseColour(1.0, 0.1, 0.1);
     spotLight->setSpecularColour(1.0, 0.1, 0.1);
-    spotLight->setDirection(-1, -1, 0);
+    spotLight->setDirection(0, -1, 0);
     spotLight->setPosition(transVector);
-    spotLight->setSpotlightRange(Ogre::Degree(28), Ogre::Degree(28));
+    spotLight->setSpotlightRange(Ogre::Degree(35), Ogre::Degree(35));
 	return spotLight;
 }
 
 void Floor::makePlane(const Ogre::String name, Ogre::Vector3 transVector, Ogre::String texture) {
 	Ogre::Plane plane(Ogre::Vector3::UNIT_Y, 0);
     Ogre::MeshManager::getSingleton().createPlane("ground", Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME,
-        plane, 200, 200, 3, 3, true, 1, 1, 1, Ogre::Vector3::UNIT_Z);
+        plane, 200, 200, 16, 16, true, 1, 1, 1, Ogre::Vector3::UNIT_Z);
     Ogre::Entity* entGround = mSceneMgr->createEntity(name, "ground");
     Ogre::SceneNode *floorPiece = mSceneMgr->getSceneNode("floor")->createChildSceneNode();
 	floorPiece->translate(transVector);

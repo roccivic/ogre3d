@@ -42,21 +42,90 @@ void OgreApp1::createScene(void)
     mSceneMgr->setAmbientLight(Ogre::ColourValue(0.3, 0.3, 0.3));
     mSceneMgr->setShadowTechnique(Ogre::SHADOWTYPE_STENCIL_MODULATIVE);
  
-    Ogre::Entity* entPlayer = mSceneMgr->createEntity("Player", "ninja.mesh");
-    entPlayer->setCastShadows(true);
-	Ogre::SceneNode* nodPlayer = mSceneMgr->getRootSceneNode()->createChildSceneNode();
-	nodPlayer->attachObject(entPlayer);
-	nodPlayer->translate(Ogre::Vector3(-400, 0, 400));
+    mPlayer = mSceneMgr->createEntity("Player", "ninja.mesh");
+    mPlayer->setCastShadows(true);
+	mPlayerNode = mSceneMgr->getRootSceneNode()->createChildSceneNode("PlayerNode");
+	mPlayerNode->attachObject(mPlayer);
+	mPlayerNode->translate(Ogre::Vector3(-400, 0, 400));
+
+	Ogre::Light* spotLight = mSceneMgr->createLight("PlayerLight");
+    spotLight->setType(Ogre::Light::LT_SPOTLIGHT);
+    spotLight->setDiffuseColour(0.1, 1.0, 0.1);
+    spotLight->setSpecularColour(0.1, 1.0, 0.1);
+    spotLight->setDirection(0, -1, 0);
+    spotLight->setPosition(Ogre::Vector3(0, 300, 0));
+    spotLight->setSpotlightRange(Ogre::Degree(35), Ogre::Degree(35));
+	mPlayerNode->attachObject(spotLight);
+
 
     Ogre::Entity* entOpponent = mSceneMgr->createEntity("Opponent", "penguin.mesh");
     entOpponent->setCastShadows(true);
-    Ogre::SceneNode* nodOpponent = mSceneMgr->getRootSceneNode()->createChildSceneNode();
+    Ogre::SceneNode* nodOpponent = mSceneMgr->getRootSceneNode()->createChildSceneNode("OpponentNode");
 	nodOpponent->attachObject(entOpponent);
 	nodOpponent->translate(Ogre::Vector3(400, 25, -400));
  
+
+	Ogre::Light* spotLight2 = mSceneMgr->createLight("OpponentLight");
+    spotLight2->setType(Ogre::Light::LT_SPOTLIGHT);
+    spotLight2->setDiffuseColour(0.1, 0.1, 1.0);
+    spotLight2->setSpecularColour(0.1, 0.1, 1.0);
+    spotLight2->setDirection(0, -1, 0);
+    spotLight2->setPosition(Ogre::Vector3(0, 300, 0));
+    spotLight2->setSpotlightRange(Ogre::Degree(35), Ogre::Degree(35));
+	nodOpponent->attachObject(spotLight2);
+
+
 	Floor* floor = new Floor(mSceneMgr);
 	floor->makeFloor();
 	delete floor;
+}
+
+void OgreApp1::createFrameListener(void){
+	BaseApplication::createFrameListener();
+}
+
+bool OgreApp1::frameRenderingQueued(const Ogre::FrameEvent& evt)
+{
+    bool ret = BaseApplication::frameRenderingQueued(evt);
+ 
+    if(!processUnbufferedInput(evt)) return false;
+
+	mDetailsPanel->setParamValue(0, "Ninja");
+
+    return true;
+}
+
+bool OgreApp1::processUnbufferedInput(const Ogre::FrameEvent& evt)
+{
+    static Ogre::Real mRotate = 0.13;   // The rotate constant
+    static Ogre::Real mMove = 250;      // The movement constant
+	mKeyboard->capture();
+	Ogre::Vector3 transVector = Ogre::Vector3::ZERO;
+	bool moved = false;
+	if (mKeyboard->isKeyDown(OIS::KC_W)) // Forward
+	{
+		transVector.z -= mMove;
+		moved = true;
+	}
+	if (mKeyboard->isKeyDown(OIS::KC_S)) // Backward
+	{
+		transVector.z += mMove;
+		moved = true;
+	}
+	if (moved) {
+		if (mKeyboard->isKeyDown(OIS::KC_A)) // Left - yaw
+		{
+			// Yaw left
+			mSceneMgr->getSceneNode("PlayerNode")->yaw(Ogre::Degree(mRotate * 25));
+		}
+		if (mKeyboard->isKeyDown(OIS::KC_D)) // Right - yaw
+		{
+			// Yaw right
+			mSceneMgr->getSceneNode("PlayerNode")->yaw(Ogre::Degree(-mRotate * 25));
+		}
+	}
+	mSceneMgr->getSceneNode("PlayerNode")->translate(transVector * evt.timeSinceLastFrame, Ogre::Node::TS_LOCAL);
+    return true;
 }
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
