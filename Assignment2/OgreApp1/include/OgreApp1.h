@@ -31,6 +31,10 @@ private:
 	Ogre::Real timerForSquares;
 	Floor* floor;
 	Player* player;
+	bool panning;
+	bool switchCamera;
+    Ogre::Camera* mCamera2;
+	Ogre::Viewport* vp;
 };
 
 #endif // #ifndef __OgreApp1_h_

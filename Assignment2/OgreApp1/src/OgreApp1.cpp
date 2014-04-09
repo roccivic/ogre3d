@@ -3,6 +3,8 @@
 
 OgreApp1::OgreApp1(void) {
 	timerForSquares = 0.5;
+	panning = false;
+	switchCamera = false;
 }
  
 OgreApp1::~OgreApp1(void) {
@@ -16,16 +18,25 @@ void OgreApp1::createCamera(void) {
     mCamera->lookAt(Ogre::Vector3(0,0,0));
     // set the near clip distance
     mCamera->setNearClipDistance(5);
+
+	// create the camera
+    mCamera2 = mSceneMgr->createCamera("PlayerCam2");
+    // set its position, direction  
+    mCamera2->setPosition(Ogre::Vector3(0,300,400));
+    mCamera2->lookAt(Ogre::Vector3(0,0,-400));
+    // set the near clip distance
+    mCamera2->setNearClipDistance(5);
  
     mCameraMan = new OgreBites::SdkCameraMan(mCamera);   // create a default camera controller
 }
 
 void OgreApp1::createViewports(void) {
 	// Create one viewport, entire window
-    Ogre::Viewport* vp = mWindow->addViewport(mCamera);
+    vp = mWindow->addViewport(mCamera);
     vp->setBackgroundColour(Ogre::ColourValue(0,0,0));
     // Alter the camera aspect ratio to match the viewport
-    mCamera->setAspectRatio(Ogre::Real(vp->getActualWidth()) / Ogre::Real(vp->getActualHeight())); 
+    mCamera->setAspectRatio(Ogre::Real(vp->getActualWidth()) / Ogre::Real(vp->getActualHeight()));
+	mCamera2->setAspectRatio(Ogre::Real(vp->getActualWidth()) / Ogre::Real(vp->getActualHeight()));
 }
 
 void OgreApp1::createScene(void) {
@@ -50,6 +61,7 @@ void OgreApp1::createScene(void) {
 	floor->makeFloor();
 	player = new Player(mSceneMgr);
 	player->makePlayer();
+	mSceneMgr->getSceneNode("PlayerNode")->attachObject(mCamera2);
 }
 
 void OgreApp1::createFrameListener(void) {
@@ -98,6 +110,14 @@ bool OgreApp1::keyPressed( const OIS::KeyEvent& evt ) {
 		case OIS::KC_3:
 			player->character3();
 			break;
+		case OIS::KC_C:
+			switchCamera = ! switchCamera;
+			if (switchCamera) {
+				vp->setCamera(mCamera2);
+			} else {
+				vp->setCamera(mCamera);
+			}
+			break;
 		default:
 			break;
     }
@@ -110,12 +130,18 @@ bool OgreApp1::keyReleased( const OIS::KeyEvent& evt ) {
 
 // OIS::MouseListener
 bool OgreApp1::mouseMoved( const OIS::MouseEvent& evt ){
-	return true;
+	bool retval = true;
+	if (panning) {
+		retval = BaseApplication::mouseMoved(evt);
+	}
+	return retval;
 }
 bool OgreApp1::mousePressed( const OIS::MouseEvent& evt, OIS::MouseButtonID id ){
+	panning = true;
 	return true;
 }
 bool OgreApp1::mouseReleased( const OIS::MouseEvent& evt, OIS::MouseButtonID id ){
+	panning = false;
 	return true;
 }
 
