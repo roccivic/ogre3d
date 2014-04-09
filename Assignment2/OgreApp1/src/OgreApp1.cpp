@@ -1,19 +1,15 @@
 #include "OgreApp1.h"
 
-//-------------------------------------------------------------------------------------
-OgreApp1::OgreApp1(void)
-{
+
+OgreApp1::OgreApp1(void) {
 	timerForSquares = 0.5;
+	rotated = false;
 }
  
-//-------------------------------------------------------------------------------------
-OgreApp1::~OgreApp1(void)
-{
+OgreApp1::~OgreApp1(void) {
 }
- 
-//-------------------------------------------------------------------------------------
-void OgreApp1::createCamera(void)
-{
+
+void OgreApp1::createCamera(void) {
 	// create the camera
     mCamera = mSceneMgr->createCamera("PlayerCam");
     // set its position, direction  
@@ -24,20 +20,16 @@ void OgreApp1::createCamera(void)
  
     mCameraMan = new OgreBites::SdkCameraMan(mCamera);   // create a default camera controller
 }
- 
-//-------------------------------------------------------------------------------------
-void OgreApp1::createViewports(void)
-{
+
+void OgreApp1::createViewports(void) {
 	// Create one viewport, entire window
     Ogre::Viewport* vp = mWindow->addViewport(mCamera);
     vp->setBackgroundColour(Ogre::ColourValue(0,0,0));
     // Alter the camera aspect ratio to match the viewport
     mCamera->setAspectRatio(Ogre::Real(vp->getActualWidth()) / Ogre::Real(vp->getActualHeight())); 
 }
- 
-//-------------------------------------------------------------------------------------
-void OgreApp1::createScene(void)
-{
+
+void OgreApp1::createScene(void) {
 	mSceneMgr->setSkyBox(true, "Examples/SpaceSkyBox", 5000, false);
     mSceneMgr->setAmbientLight(Ogre::ColourValue(0.3, 0.3, 0.3));
     mSceneMgr->setShadowTechnique(Ogre::SHADOWTYPE_STENCIL_MODULATIVE);
@@ -63,8 +55,6 @@ void OgreApp1::createScene(void)
     Ogre::SceneNode* nodOpponent = mSceneMgr->getRootSceneNode()->createChildSceneNode("OpponentNode");
 	nodOpponent->attachObject(entOpponent);
 	nodOpponent->translate(Ogre::Vector3(400, 25, -400));
- 
-
 	Ogre::Light* spotLight2 = mSceneMgr->createLight("OpponentLight");
     spotLight2->setType(Ogre::Light::LT_SPOTLIGHT);
     spotLight2->setDiffuseColour(0.1, 0.1, 1.0);
@@ -73,77 +63,86 @@ void OgreApp1::createScene(void)
     spotLight2->setPosition(Ogre::Vector3(0, 300, 0));
     spotLight2->setSpotlightRange(Ogre::Degree(35), Ogre::Degree(35));
 	nodOpponent->attachObject(spotLight2);
-
-
 	floor = new Floor(mSceneMgr);
 	floor->makeFloor();
 }
 
-void OgreApp1::createFrameListener(void){
+void OgreApp1::createFrameListener(void) {
 	BaseApplication::createFrameListener();
 }
 
-bool OgreApp1::frameRenderingQueued(const Ogre::FrameEvent& evt)
-{
+bool OgreApp1::frameRenderingQueued(const Ogre::FrameEvent& evt) {
     bool ret = BaseApplication::frameRenderingQueued(evt);
-
  	mPlayerAnimation = mPlayer->getAnimationState("Idle2");
     mPlayerAnimation->setLoop(true);
     mPlayerAnimation->setEnabled(true);
-
-    if(!processUnbufferedInput(evt)) return false;
-
 	mDetailsPanel->setParamValue(0, "Ninja");
-
 	mPlayerAnimation->addTime(evt.timeSinceLastFrame);
-
-
 	timerForSquares -= evt.timeSinceLastFrame;
 	if (timerForSquares < 0) {
 		timerForSquares = 0.5;
 		floor->updateLights();
 	}
-
     return ret;
 }
 
-bool OgreApp1::processUnbufferedInput(const Ogre::FrameEvent& evt)
-{
-    static Ogre::Real mRotate = 0.13;   // The rotate constant
-    static Ogre::Real mMove = 250;      // The movement constant
-	mKeyboard->capture();
+// OIS::KeyListener
+bool OgreApp1::keyPressed( const OIS::KeyEvent& evt ) {
 	Ogre::Vector3 transVector = Ogre::Vector3::ZERO;
-	bool moved = false;
-	if (mKeyboard->isKeyDown(OIS::KC_W)) // Forward
-	{
-		transVector.z -= mMove;
-		moved = true;
-		mPlayerAnimation = mPlayer->getAnimationState("Walk");
-        mPlayerAnimation->setLoop(true);
-        mPlayerAnimation->setEnabled(true);
-	}
-	if (mKeyboard->isKeyDown(OIS::KC_S)) // Backward
-	{
-		transVector.z += mMove;
-		moved = true;
-		mPlayerAnimation = mPlayer->getAnimationState("Walk");
-        mPlayerAnimation->setLoop(true);
-        mPlayerAnimation->setEnabled(true);
-	}
-	if (moved) {
-		if (mKeyboard->isKeyDown(OIS::KC_A)) // Left - yaw
-		{
-			// Yaw left
-			mSceneMgr->getSceneNode("PlayerNode")->yaw(Ogre::Degree(mRotate * 25));
-		}
-		if (mKeyboard->isKeyDown(OIS::KC_D)) // Right - yaw
-		{
-			// Yaw right
-			mSceneMgr->getSceneNode("PlayerNode")->yaw(Ogre::Degree(-mRotate * 25));
-		}
-	}
-	mSceneMgr->getSceneNode("PlayerNode")->translate(transVector * evt.timeSinceLastFrame, Ogre::Node::TS_LOCAL);
+	Ogre::Degree rotateDegree = Ogre::Degree(0);
+    switch (evt.key) {
+		case OIS::KC_UP:
+		case OIS::KC_W:
+			if (! rotated) {
+				transVector = Ogre::Vector3(0,0,-200);
+			} else {
+				transVector = Ogre::Vector3(0,0,-282.8427);
+			}
+			break;
+
+		case OIS::KC_DOWN:
+		case OIS::KC_S:
+			if (! rotated) {
+				transVector = Ogre::Vector3(0,0,200);
+			} else {
+				transVector = Ogre::Vector3(0,0,282.8427);
+			}
+			break;
+ 
+		case OIS::KC_LEFT:
+		case OIS::KC_A:
+			rotated = !rotated;
+			rotateDegree = Ogre::Degree(45);
+			break;
+ 
+		case OIS::KC_RIGHT:
+		case OIS::KC_D:
+			rotated = !rotated;
+			rotateDegree = Ogre::Degree(-45);
+			break;
+
+		default:
+			break;
+    }
+	mSceneMgr->getSceneNode("PlayerNode")->yaw(rotateDegree);
+	mSceneMgr->getSceneNode("PlayerNode")->translate(transVector, Ogre::Node::TS_LOCAL);
+
     return true;
+}
+
+bool OgreApp1::keyReleased( const OIS::KeyEvent& evt ) {
+	return true;
+}
+
+// OIS::MouseListener
+bool OgreApp1::mouseMoved( const OIS::MouseEvent& evt ){
+	return true;
+}
+bool OgreApp1::mousePressed( const OIS::MouseEvent& evt, OIS::MouseButtonID id ){
+	return true;
+}
+bool OgreApp1::mouseReleased( const OIS::MouseEvent& evt, OIS::MouseButtonID id ){
+	return true;
 }
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32

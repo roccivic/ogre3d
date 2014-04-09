@@ -19,9 +19,14 @@ protected:
 	virtual void createViewports(void);
     virtual void createFrameListener(void);
 	virtual bool frameRenderingQueued(const Ogre::FrameEvent& evt);
-
+	// OIS::KeyListener
+    virtual bool keyPressed(const OIS::KeyEvent& evt);
+    virtual bool keyReleased(const OIS::KeyEvent& evt);
+	// OIS::MouseListener
+    virtual bool mouseMoved( const OIS::MouseEvent& evt );
+    virtual bool mousePressed( const OIS::MouseEvent& evt, OIS::MouseButtonID id );
+    virtual bool mouseReleased( const OIS::MouseEvent& evt, OIS::MouseButtonID id );
 private:
-    bool processUnbufferedInput(const Ogre::FrameEvent& evt);
 
 	Ogre::AnimationState *mPlayerAnimation;      // The current animation state of the object
     Ogre::Entity *mPlayer;                       // The Entity we are animating
@@ -30,6 +35,8 @@ private:
 	Ogre::Real timerForSquares;
 
 	Floor* floor;
+
+	bool rotated;
 };
 
 #endif // #ifndef __OgreApp1_h_
