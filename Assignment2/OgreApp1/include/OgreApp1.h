@@ -4,6 +4,7 @@
 #include "BaseApplication.h"
 #include "Floor.h"
 #include "Player.h"
+#include "Opponent.h"
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
 #include "../res/resource.h"
 #endif
@@ -31,6 +32,7 @@ private:
 	Ogre::Real timerForSquares;
 	Floor* floor;
 	Player* player;
+	Opponent* opponent;
 	bool panning;
 	bool switchCamera;
     Ogre::Camera* mCamera2;

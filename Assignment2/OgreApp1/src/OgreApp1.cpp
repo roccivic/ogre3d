@@ -44,24 +44,13 @@ void OgreApp1::createScene(void) {
     mSceneMgr->setAmbientLight(Ogre::ColourValue(0.4, 0.4, 0.4));
     mSceneMgr->setShadowTechnique(Ogre::SHADOWTYPE_STENCIL_MODULATIVE);
 
-    Ogre::Entity* entOpponent = mSceneMgr->createEntity("Opponent", "penguin.mesh");
-    entOpponent->setCastShadows(true);
-    Ogre::SceneNode* nodOpponent = mSceneMgr->getRootSceneNode()->createChildSceneNode("OpponentNode");
-	nodOpponent->attachObject(entOpponent);
-	nodOpponent->translate(Ogre::Vector3(400, 25, -400));
-	Ogre::Light* spotLight2 = mSceneMgr->createLight("OpponentLight");
-    spotLight2->setType(Ogre::Light::LT_SPOTLIGHT);
-    spotLight2->setDiffuseColour(0.1, 0.1, 1.0);
-    spotLight2->setSpecularColour(0.1, 0.1, 1.0);
-    spotLight2->setDirection(0, -1, 0);
-    spotLight2->setPosition(Ogre::Vector3(0, 300, 0));
-    spotLight2->setSpotlightRange(Ogre::Degree(35), Ogre::Degree(35));
-	nodOpponent->attachObject(spotLight2);
 	floor = new Floor(mSceneMgr);
 	floor->makeFloor();
 	player = new Player(mSceneMgr);
 	player->makePlayer();
 	mSceneMgr->getSceneNode("PlayerNode")->attachObject(mCamera2);
+	opponent = new Opponent(mSceneMgr);
+	opponent->makeOpponent();
 }
 
 void OgreApp1::createFrameListener(void) {
@@ -71,6 +60,7 @@ void OgreApp1::createFrameListener(void) {
 bool OgreApp1::frameRenderingQueued(const Ogre::FrameEvent& evt) {
     bool ret = BaseApplication::frameRenderingQueued(evt);
 	player->tick(evt);
+	opponent->tick(evt);
 	mDetailsPanel->setParamValue(0, "Ninja");
 	mDetailsPanel->setParamValue(1, "Jaiqua");
 	mDetailsPanel->setParamValue(2, "Robot");
@@ -131,7 +121,7 @@ bool OgreApp1::keyReleased( const OIS::KeyEvent& evt ) {
 // OIS::MouseListener
 bool OgreApp1::mouseMoved( const OIS::MouseEvent& evt ){
 	bool retval = true;
-	if (panning) {
+	if (panning && ! switchCamera) {
 		retval = BaseApplication::mouseMoved(evt);
 	}
 	return retval;
