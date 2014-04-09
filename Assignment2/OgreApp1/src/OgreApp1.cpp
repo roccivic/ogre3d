@@ -1,9 +1,9 @@
 #include "OgreApp1.h"
-#include "Floor.h"
 
 //-------------------------------------------------------------------------------------
 OgreApp1::OgreApp1(void)
 {
+	timerForSquares = 0.5;
 }
  
 //-------------------------------------------------------------------------------------
@@ -75,9 +75,8 @@ void OgreApp1::createScene(void)
 	nodOpponent->attachObject(spotLight2);
 
 
-	Floor* floor = new Floor(mSceneMgr);
+	floor = new Floor(mSceneMgr);
 	floor->makeFloor();
-	delete floor;
 }
 
 void OgreApp1::createFrameListener(void){
@@ -87,12 +86,25 @@ void OgreApp1::createFrameListener(void){
 bool OgreApp1::frameRenderingQueued(const Ogre::FrameEvent& evt)
 {
     bool ret = BaseApplication::frameRenderingQueued(evt);
- 
+
+ 	mPlayerAnimation = mPlayer->getAnimationState("Idle2");
+    mPlayerAnimation->setLoop(true);
+    mPlayerAnimation->setEnabled(true);
+
     if(!processUnbufferedInput(evt)) return false;
 
 	mDetailsPanel->setParamValue(0, "Ninja");
 
-    return true;
+	mPlayerAnimation->addTime(evt.timeSinceLastFrame);
+
+
+	timerForSquares -= evt.timeSinceLastFrame;
+	if (timerForSquares < 0) {
+		timerForSquares = 0.5;
+		floor->updateLights();
+	}
+
+    return ret;
 }
 
 bool OgreApp1::processUnbufferedInput(const Ogre::FrameEvent& evt)
@@ -106,11 +118,17 @@ bool OgreApp1::processUnbufferedInput(const Ogre::FrameEvent& evt)
 	{
 		transVector.z -= mMove;
 		moved = true;
+		mPlayerAnimation = mPlayer->getAnimationState("Walk");
+        mPlayerAnimation->setLoop(true);
+        mPlayerAnimation->setEnabled(true);
 	}
 	if (mKeyboard->isKeyDown(OIS::KC_S)) // Backward
 	{
 		transVector.z += mMove;
 		moved = true;
+		mPlayerAnimation = mPlayer->getAnimationState("Walk");
+        mPlayerAnimation->setLoop(true);
+        mPlayerAnimation->setEnabled(true);
 	}
 	if (moved) {
 		if (mKeyboard->isKeyDown(OIS::KC_A)) // Left - yaw

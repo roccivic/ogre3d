@@ -2,6 +2,7 @@
 #define __OgreApp1_h_
 
 #include "BaseApplication.h"
+#include "Floor.h"
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
 #include "../res/resource.h"
 #endif
@@ -25,6 +26,10 @@ private:
 	Ogre::AnimationState *mPlayerAnimation;      // The current animation state of the object
     Ogre::Entity *mPlayer;                       // The Entity we are animating
     Ogre::SceneNode *mPlayerNode;                // The SceneNode that the Entity is attached to
+
+	Ogre::Real timerForSquares;
+
+	Floor* floor;
 };
 
 #endif // #ifndef __OgreApp1_h_
