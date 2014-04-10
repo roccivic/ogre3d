@@ -2,10 +2,16 @@
 
 Opponent::Opponent(Ogre::SceneManager* mSceneMgr) {
 	this->mSceneMgr = mSceneMgr;
+	position[0] = 4;
+	position[1] = 4;
 }
  
 Opponent::~Opponent(void) {
 
+}
+
+int* Opponent::getPosition() {
+	return position;
 }
 
 void Opponent::makeOpponent() {

@@ -5,6 +5,7 @@ class Player
 public:
     Player(Ogre::SceneManager* mSceneMgr);
     ~Player();
+	int* getPosition();
 	void makePlayer();
 	void tick(const Ogre::FrameEvent& evt);
 	void keyUp();
@@ -16,6 +17,8 @@ public:
 	void character3();
 
 private:
+	int position[2];
+	int direction;
 	Ogre::SceneManager* mSceneMgr;
 	Ogre::AnimationState *mPlayerAnimation1;
 	Ogre::AnimationState *mPlayerAnimation2;
@@ -25,4 +28,5 @@ private:
     Ogre::Entity *mPlayer3;
     Ogre::SceneNode *mPlayerNode;
 	bool rotated;
+	bool updatePosition(int dir);
 };

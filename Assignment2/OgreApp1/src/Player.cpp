@@ -1,12 +1,20 @@
 #include "Player.h"
+#include "Direction.h"
 
 Player::Player(Ogre::SceneManager* mSceneMgr) {
 	this->mSceneMgr = mSceneMgr;
 	rotated = false;
+	position[0] = 0;
+	position[1] = 0;
+	direction = Direction::NORTH;
 }
  
 Player::~Player(void) {
 
+}
+
+int* Player::getPosition() {
+	return position;
 }
 
 void Player::makePlayer() {
@@ -67,31 +75,81 @@ void Player::tick(const Ogre::FrameEvent& evt) {
 }
 
 void Player::keyUp() {
-	Ogre::Vector3 transVector = Ogre::Vector3::ZERO;
-	if (! rotated) {
-		transVector = Ogre::Vector3(0,0,-200);
-	} else {
-		transVector = Ogre::Vector3(0,0,-282.8427);
+	if (updatePosition(direction)) {
+		Ogre::Vector3 transVector = Ogre::Vector3::ZERO;
+		if (! rotated) {
+			transVector = Ogre::Vector3(0,0,-200);
+		} else {
+			transVector = Ogre::Vector3(0,0,-282.8427);
+		}
+		mSceneMgr->getSceneNode("PlayerNode")->translate(transVector, Ogre::Node::TS_LOCAL);
 	}
-	mSceneMgr->getSceneNode("PlayerNode")->translate(transVector, Ogre::Node::TS_LOCAL);
 }
 
 void Player::keyDown() {
-	Ogre::Vector3 transVector = Ogre::Vector3::ZERO;
-	if (! rotated) {
-		transVector = Ogre::Vector3(0,0,200);
-	} else {
-		transVector = Ogre::Vector3(0,0,282.8427);
+	int dir = direction + 4;
+	if (dir > 7) {
+		dir -= 8;
 	}
-	mSceneMgr->getSceneNode("PlayerNode")->translate(transVector, Ogre::Node::TS_LOCAL);
+	if (updatePosition(dir)) {
+		Ogre::Vector3 transVector = Ogre::Vector3::ZERO;
+		if (! rotated) {
+			transVector = Ogre::Vector3(0,0,200);
+		} else {
+			transVector = Ogre::Vector3(0,0,282.8427);
+		}
+		mSceneMgr->getSceneNode("PlayerNode")->translate(transVector, Ogre::Node::TS_LOCAL);
+	}
+}
+
+bool Player::updatePosition(int dir) {
+	bool moved = false;
+	if (dir == Direction::NORTH && position[1] < 4) {
+		position[1]++;
+		moved = true;
+	} else if (dir == Direction::NORTH_EAST && position[1] < 4 && position[0] < 4) {
+		position[0]++;
+		position[1]++;
+		moved = true;
+	} else if (dir == Direction::EAST && position[0] < 4) {
+		position[0]++;
+		moved = true;
+	} else if (dir == Direction::SOUTH_EAST && position[1] > 0 && position[0] < 4) {
+		position[0]++;
+		position[1]--;
+		moved = true;
+	} else if (dir == Direction::SOUTH && position[1] > 0) {
+		position[1]--;
+		moved = true;
+	} else if (dir == Direction::SOUTH_WEST && position[1] > 0 && position[0] > 0) {
+		position[0]--;
+		position[1]--;
+		moved = true;
+	} else if (dir == Direction::WEST && position[0] > 0) {
+		position[0]--;
+		moved = true;
+	} else if (dir == Direction::NORTH_WEST && position[1] < 4 && position[0] > 0) {
+		position[0]--;
+		position[1]++;
+		moved = true;
+	}
+	return moved;
 }
 
 void Player::keyLeft() {
+	direction--;
+	if (direction < 0) {
+		direction = 7;
+	}
 	rotated = !rotated;
 	mSceneMgr->getSceneNode("PlayerNode")->yaw(Ogre::Degree(45));
 }
 
 void Player::keyRight() {
+	direction++;
+	if (direction > 7) {
+		direction = 0;
+	}
 	rotated = !rotated;
 	mSceneMgr->getSceneNode("PlayerNode")->yaw(Ogre::Degree(-45));
 }

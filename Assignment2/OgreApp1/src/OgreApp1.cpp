@@ -11,30 +11,21 @@ OgreApp1::~OgreApp1(void) {
 }
 
 void OgreApp1::createCamera(void) {
-	// create the camera
     mCamera = mSceneMgr->createCamera("PlayerCam");
-    // set its position, direction  
     mCamera->setPosition(Ogre::Vector3(0,700,1300));
     mCamera->lookAt(Ogre::Vector3(0,0,0));
-    // set the near clip distance
     mCamera->setNearClipDistance(5);
+	mCameraMan = new OgreBites::SdkCameraMan(mCamera);
 
-	// create the camera
     mCamera2 = mSceneMgr->createCamera("PlayerCam2");
-    // set its position, direction  
     mCamera2->setPosition(Ogre::Vector3(0,300,400));
     mCamera2->lookAt(Ogre::Vector3(0,0,-400));
-    // set the near clip distance
     mCamera2->setNearClipDistance(5);
- 
-    mCameraMan = new OgreBites::SdkCameraMan(mCamera);   // create a default camera controller
 }
 
 void OgreApp1::createViewports(void) {
-	// Create one viewport, entire window
     vp = mWindow->addViewport(mCamera);
     vp->setBackgroundColour(Ogre::ColourValue(0,0,0));
-    // Alter the camera aspect ratio to match the viewport
     mCamera->setAspectRatio(Ogre::Real(vp->getActualWidth()) / Ogre::Real(vp->getActualHeight()));
 	mCamera2->setAspectRatio(Ogre::Real(vp->getActualWidth()) / Ogre::Real(vp->getActualHeight()));
 }
