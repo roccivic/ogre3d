@@ -29,11 +29,11 @@ void Opponent::makeOpponent() {
 	mOpponentNode->translate(Ogre::Vector3(400, 25, -400));
 	Ogre::Light* spotLight2 = mSceneMgr->createLight("OpponentLight");
     spotLight2->setType(Ogre::Light::LT_SPOTLIGHT);
-    spotLight2->setDiffuseColour(0.1, 0.1, 1.0);
-    spotLight2->setSpecularColour(0.1, 0.1, 1.0);
+    spotLight2->setDiffuseColour(0.5, 0.5, 0.5);
+    spotLight2->setSpecularColour(0.5, 0.5, 0.5);
     spotLight2->setDirection(0, -1, 0);
     spotLight2->setPosition(Ogre::Vector3(0, 300, 0));
-    spotLight2->setSpotlightRange(Ogre::Degree(35), Ogre::Degree(35));
+    spotLight2->setSpotlightRange(Ogre::Degree(30), Ogre::Degree(60));
 	mOpponentNode->attachObject(spotLight2);
 	lookAtOrigin();
 }
@@ -127,7 +127,7 @@ void Opponent::move() {
 			position[0] = position2[0];
 			position[1] = position2[1];
 		}
-		mDestination = Ogre::Vector3(position[0]*200-400, 25, position[1]*200-400);
+		mDestination = Ogre::Vector3(position[0]*200-400, 25, -(position[1]*200-400));
 		mDirection = mDestination - mOpponentNode->getPosition();
 		Ogre::Vector3 src = mOpponentNode->getOrientation() * -Ogre::Vector3::UNIT_X;
 		Ogre::Quaternion quat = src.getRotationTo(mDirection);
