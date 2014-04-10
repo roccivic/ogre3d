@@ -26,6 +26,13 @@ private:
     Ogre::Vector3 mDirection;
     Ogre::Vector3 mDestination;
 	void lookAtOrigin();
+
+	Ogre::Quaternion mOrientSrc;
+	Ogre::Quaternion mOrientDest;
+	Ogre::Real mRotProgress;
+	Ogre::Real mRotFactor;
+	bool mRotating1;
+	bool mRotating2;
 };
 
 #endif

@@ -7,6 +7,8 @@ Opponent::Opponent(Ogre::SceneManager* mSceneMgr, Player* player) {
 	position[1] = 4;
 	timer = 5.0;
 	busy = false;
+	mRotating1 = false;
+	mRotating2 = false;
 }
  
 Opponent::~Opponent(void) {
@@ -47,20 +49,43 @@ void Opponent::tick(const Ogre::FrameEvent& evt) {
 		move();
 	}
 	if (busy) {
-		//mOpponentNode->translate(Ogre::Vector3(position[0]*200-400, 25, position[1]*200-400));
-		mDirection = mDestination - mOpponentNode->getPosition();
-		mDistance = mDirection.normalise();
-
-		Ogre::Real move = 800 * evt.timeSinceLastFrame;
-        mDistance -= move;
-		if (mDistance <= 0.0f) {
-            mOpponentNode->setPosition(mDestination);
-            mDirection = Ogre::Vector3::ZERO;
-			busy = false;
-			lookAtOrigin();
-        } else {
-            mOpponentNode->translate(mDirection * move);
-        }
+		if (mRotating1) {
+			mRotProgress += mRotFactor;
+			if(mRotProgress>1) {
+				mRotating1 = false;
+			} else {
+				Ogre::Quaternion delta = Ogre::Quaternion::Slerp(mRotProgress, mOrientSrc, mOrientDest, true);
+				mOpponentNode->setOrientation(delta);
+			}
+		} else if (mRotating2) {
+			mRotProgress += mRotFactor;
+			if(mRotProgress>1) {
+				mRotating2 = false;
+				busy = false;
+			} else {
+				Ogre::Quaternion delta = Ogre::Quaternion::Slerp(mRotProgress, mOrientSrc, mOrientDest, true);
+				mOpponentNode->setOrientation(delta);
+			}
+		} else {
+			mDirection = mDestination - mOpponentNode->getPosition();
+			mDistance = mDirection.normalise();
+			Ogre::Real move = 800 * evt.timeSinceLastFrame;
+			mDistance -= move;
+			if (mDistance <= 0.0f) {
+				mOpponentNode->setPosition(mDestination);
+				mDestination = Ogre::Vector3(0, 25, 0);
+				mDirection = mDestination - mOpponentNode->getPosition();
+				Ogre::Vector3 src = mOpponentNode->getOrientation() * -Ogre::Vector3::UNIT_X;
+				Ogre::Quaternion quat = src.getRotationTo(mDirection);
+				mRotating2 = true;
+				mRotFactor = 1.0f / 25;
+				mOrientSrc = mOpponentNode->getOrientation();
+				mOrientDest = quat * mOrientSrc;
+				mRotProgress = 0;
+			} else {
+				mOpponentNode->translate(mDirection * move);
+			}
+		}
 	}
 }
 
@@ -105,11 +130,11 @@ void Opponent::move() {
 		mDestination = Ogre::Vector3(position[0]*200-400, 25, position[1]*200-400);
 		mDirection = mDestination - mOpponentNode->getPosition();
 		Ogre::Vector3 src = mOpponentNode->getOrientation() * -Ogre::Vector3::UNIT_X;
-        if ((1.0f + src.dotProduct(mDirection)) < 0.0001f) {
-            mOpponentNode->yaw(Ogre::Degree(180));
-        } else {
-            Ogre::Quaternion quat = src.getRotationTo(mDirection);
-            mOpponentNode->rotate(quat);
-        }
+		Ogre::Quaternion quat = src.getRotationTo(mDirection);
+		mRotating1 = true;
+		mRotFactor = 1.0f / 10;
+		mOrientSrc = mOpponentNode->getOrientation();
+		mOrientDest = quat * mOrientSrc;
+		mRotProgress = 0;
 	}
 }
