@@ -33,6 +33,9 @@ private:
 	Ogre::Real mRotFactor;
 	bool mRotating1;
 	bool mRotating2;
+	bool dying;
+	int dyingProgress;
+	bool dead;
 };
 
 #endif

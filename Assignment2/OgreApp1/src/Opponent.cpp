@@ -9,6 +9,8 @@ Opponent::Opponent(Ogre::SceneManager* mSceneMgr, Player* player) {
 	busy = false;
 	mRotating1 = false;
 	mRotating2 = false;
+	dying = false;
+	dead = false;
 }
  
 Opponent::~Opponent(void) {
@@ -29,8 +31,8 @@ void Opponent::makeOpponent() {
 	mOpponentNode->translate(Ogre::Vector3(400, 25, -400));
 	Ogre::Light* spotLight2 = mSceneMgr->createLight("OpponentLight");
     spotLight2->setType(Ogre::Light::LT_SPOTLIGHT);
-    spotLight2->setDiffuseColour(0.5, 0.5, 0.5);
-    spotLight2->setSpecularColour(0.5, 0.5, 0.5);
+    spotLight2->setDiffuseColour(0.3, 0.3, 0.3);
+    spotLight2->setSpecularColour(0.3, 0.3, 0.3);
     spotLight2->setDirection(0, -1, 0);
     spotLight2->setPosition(Ogre::Vector3(0, 300, 0));
     spotLight2->setSpotlightRange(Ogre::Degree(30), Ogre::Degree(60));
@@ -39,6 +41,9 @@ void Opponent::makeOpponent() {
 }
 
 void Opponent::tick(const Ogre::FrameEvent& evt) {
+	if (dead) {
+		return;
+	}
  	mOpponentAnimation = mOpponent->getAnimationState("swim");
     mOpponentAnimation->setLoop(true);
     mOpponentAnimation->setEnabled(true);
@@ -86,6 +91,21 @@ void Opponent::tick(const Ogre::FrameEvent& evt) {
 				mOpponentNode->translate(mDirection * move);
 			}
 		}
+	} else if (dying) {
+		dyingProgress--;
+		if (dyingProgress == 0) {
+			dying = false;
+			dead = true;
+			mOpponentNode->setVisible(false);
+		} else {
+			mOpponentNode->scale(0.8,0.8,0.8);
+		}
+	} else {
+		int* playerPos = player->getPosition();
+		if (playerPos[0] == position[0] && playerPos[1] == position[1]) {
+			dying = true;
+			dyingProgress = 50;
+		}
 	}
 }
 
@@ -98,7 +118,7 @@ void Opponent::lookAtOrigin() {
 }
 
 void Opponent::move() {
-	if (! busy) {
+	if (! busy && ! dying && ! dead) {
 		busy = true;
 		int position1[2];
 		int position2[2];

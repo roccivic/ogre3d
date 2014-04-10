@@ -53,8 +53,8 @@ void Player::makePlayer() {
 
 	Ogre::Light* spotLight = mSceneMgr->createLight("PlayerLight");
     spotLight->setType(Ogre::Light::LT_SPOTLIGHT);
-    spotLight->setDiffuseColour(0.5, 0.5, 0.5);
-    spotLight->setSpecularColour(0.5, 0.5, 0.5);
+    spotLight->setDiffuseColour(0.3, 0.3, 0.3);
+    spotLight->setSpecularColour(0.3, 0.3, 0.3);
     spotLight->setDirection(0, -1, 0);
     spotLight->setPosition(Ogre::Vector3(0, 300, 0));
     spotLight->setSpotlightRange(Ogre::Degree(30), Ogre::Degree(60));
