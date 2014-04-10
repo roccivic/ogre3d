@@ -34,6 +34,10 @@ private:
 	bool mRotating;
 	bool mRotatingLeft;
 	Ogre::Real mRotatingTarget;
+	bool walking;
+	Ogre::Real mDistance;
+    Ogre::Vector3 mDirection;
+    Ogre::Vector3 mDestination;
 };
 
 #endif

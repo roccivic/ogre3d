@@ -53,8 +53,9 @@ bool OgreApp1::frameRenderingQueued(const Ogre::FrameEvent& evt) {
 	player->tick(evt);
 	opponent->tick(evt);
 	mDetailsPanel->setParamValue(0, "Ninja");
-	mDetailsPanel->setParamValue(1, "Jaiqua");
-	mDetailsPanel->setParamValue(2, "Robot");
+	int *playerPos = player->getPosition();
+	mDetailsPanel->setParamValue(1, Ogre::StringConverter::toString(playerPos[0]));
+	mDetailsPanel->setParamValue(2, Ogre::StringConverter::toString(playerPos[0]));
 	timerForSquares -= evt.timeSinceLastFrame;
 	if (timerForSquares < 0) {
 		timerForSquares = 0.5;
