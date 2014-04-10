@@ -31,6 +31,9 @@ private:
     Ogre::SceneNode *mPlayerNode;
 	bool rotated;
 	bool updatePosition(int dir);
+	bool mRotating;
+	bool mRotatingLeft;
+	Ogre::Real mRotatingTarget;
 };
 
 #endif

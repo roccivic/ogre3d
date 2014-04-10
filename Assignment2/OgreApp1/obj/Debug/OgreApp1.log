@@ -1,10 +1,10 @@
-﻿Build started 10/04/2014 17:34:38.
+﻿Build started 10/04/2014 18:48:06.
      1>Project "C:\Users\User\Desktop\Ogre\Assignment2\OgreApp1\OgreApp1.vcxproj" on node 2 (build target(s)).
      1>InitializeBuildStatus:
          Creating "obj\Debug\OgreApp1.unsuccessfulbuild" because "AlwaysCreate" was specified.
        ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /Iinclude /I"C:\OgreSDK_vc10_v1-8-1\include" /I"C:\OgreSDK_vc10_v1-8-1\include\OIS" /I"C:\OgreSDK_vc10_v1-8-1\include\OGRE" /I"C:\OgreSDK_vc10_v1-8-1\Samples\Common\include" /I"C:\OgreSDK_vc10_v1-8-1\boost" /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _WINDOWS /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /Gy /fp:fast /Zc:wchar_t /Zc:forScope /GR /Fo"obj\Debug\\" /Fd"obj\Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt src\Opponent.cpp
-         Opponent.cpp
+         C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /Iinclude /I"C:\OgreSDK_vc10_v1-8-1\include" /I"C:\OgreSDK_vc10_v1-8-1\include\OIS" /I"C:\OgreSDK_vc10_v1-8-1\include\OGRE" /I"C:\OgreSDK_vc10_v1-8-1\Samples\Common\include" /I"C:\OgreSDK_vc10_v1-8-1\boost" /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _WINDOWS /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /Gy /fp:fast /Zc:wchar_t /Zc:forScope /GR /Fo"obj\Debug\\" /Fd"obj\Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt src\Player.cpp
+         Player.cpp
      1>c:\ogresdk_vc10_v1-8-1\include\ogre\ogrestring.h(195): warning C4251: 'Ogre::StringUtil::BLANK' : class 'std::basic_string<_Elem,_Traits,_Ax>' needs to have dll-interface to be used by clients of class 'Ogre::StringUtil'
                  with
                  [
@@ -3428,4 +3428,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:32.49
+Time Elapsed 00:00:20.34

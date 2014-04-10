@@ -7,6 +7,9 @@ Player::Player(Ogre::SceneManager* mSceneMgr) {
 	position[0] = 0;
 	position[1] = 0;
 	direction = Direction::NORTH;
+	
+	mRotating = false;
+	mRotatingLeft = false;
 }
  
 Player::~Player(void) {
@@ -70,35 +73,58 @@ void Player::tick(const Ogre::FrameEvent& evt) {
  	mPlayerAnimation3 = mPlayer3->getAnimationState("Idle");
 	mPlayerAnimation3->setLoop(true);
 	mPlayerAnimation3->setEnabled(true);
+
+	if (mRotating) {
+		mPlayerAnimation1 = mPlayer1->getAnimationState("Walk");
+		mPlayerAnimation1->setLoop(true);
+		mPlayerAnimation1->setEnabled(true);
+ 		mPlayerAnimation3 = mPlayer3->getAnimationState("Walk");
+		mPlayerAnimation3->setLoop(true);
+		mPlayerAnimation3->setEnabled(true);
+		mRotatingTarget -= 4.5;
+		if (mRotatingTarget < 0.0) {
+			mRotating = false;
+		} else {
+			if (mRotatingLeft) {
+				mSceneMgr->getSceneNode("PlayerNode")->yaw(Ogre::Degree(4.5));
+			} else {
+				mSceneMgr->getSceneNode("PlayerNode")->yaw(Ogre::Degree(-4.5));
+			}
+		}
+	}
 	mPlayerAnimation1->addTime(evt.timeSinceLastFrame);
 	mPlayerAnimation3->addTime(evt.timeSinceLastFrame);
 }
 
 void Player::keyUp() {
-	if (updatePosition(direction)) {
-		Ogre::Vector3 transVector = Ogre::Vector3::ZERO;
-		if (! rotated) {
-			transVector = Ogre::Vector3(0,0,-200);
-		} else {
-			transVector = Ogre::Vector3(0,0,-282.8427);
+	if (! mRotating) {
+		if (updatePosition(direction)) {
+			Ogre::Vector3 transVector = Ogre::Vector3::ZERO;
+			if (! rotated) {
+				transVector = Ogre::Vector3(0,0,-200);
+			} else {
+				transVector = Ogre::Vector3(0,0,-282.8427);
+			}
+			mSceneMgr->getSceneNode("PlayerNode")->translate(transVector, Ogre::Node::TS_LOCAL);
 		}
-		mSceneMgr->getSceneNode("PlayerNode")->translate(transVector, Ogre::Node::TS_LOCAL);
 	}
 }
 
 void Player::keyDown() {
-	int dir = direction + 4;
-	if (dir > 7) {
-		dir -= 8;
-	}
-	if (updatePosition(dir)) {
-		Ogre::Vector3 transVector = Ogre::Vector3::ZERO;
-		if (! rotated) {
-			transVector = Ogre::Vector3(0,0,200);
-		} else {
-			transVector = Ogre::Vector3(0,0,282.8427);
+	if (! mRotating) {
+		int dir = direction + 4;
+		if (dir > 7) {
+			dir -= 8;
 		}
-		mSceneMgr->getSceneNode("PlayerNode")->translate(transVector, Ogre::Node::TS_LOCAL);
+		if (updatePosition(dir)) {
+			Ogre::Vector3 transVector = Ogre::Vector3::ZERO;
+			if (! rotated) {
+				transVector = Ogre::Vector3(0,0,200);
+			} else {
+				transVector = Ogre::Vector3(0,0,282.8427);
+			}
+			mSceneMgr->getSceneNode("PlayerNode")->translate(transVector, Ogre::Node::TS_LOCAL);
+		}
 	}
 }
 
@@ -137,21 +163,29 @@ bool Player::updatePosition(int dir) {
 }
 
 void Player::keyLeft() {
-	direction--;
-	if (direction < 0) {
-		direction = 7;
+	if (! mRotating) {
+		mRotating = true;
+		mRotatingLeft = true;
+		direction--;
+		if (direction < 0) {
+			direction = 7;
+		}
+		rotated = !rotated;
+		mRotatingTarget = 45.0;
 	}
-	rotated = !rotated;
-	mSceneMgr->getSceneNode("PlayerNode")->yaw(Ogre::Degree(45));
 }
 
 void Player::keyRight() {
-	direction++;
-	if (direction > 7) {
-		direction = 0;
+	if (! mRotating) {
+		mRotating = true;
+		mRotatingLeft = false;
+		direction++;
+		if (direction > 7) {
+			direction = 0;
+		}
+		rotated = !rotated;
+		mRotatingTarget = 45.0;
 	}
-	rotated = !rotated;
-	mSceneMgr->getSceneNode("PlayerNode")->yaw(Ogre::Degree(-45));
 }
 
 void Player::character1() {
