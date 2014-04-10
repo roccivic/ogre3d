@@ -84,7 +84,7 @@ void Player::tick(const Ogre::FrameEvent& evt) {
 		mPlayerAnimation3->setLoop(true);
 		mPlayerAnimation3->setEnabled(true);
 		mRotatingTarget -= 4.5;
-		if (mRotatingTarget <= 0.0) {
+		if (mRotatingTarget < 0.0) {
 			mRotating = false;
 		} else {
 			if (mRotatingLeft) {
