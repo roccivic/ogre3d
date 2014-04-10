@@ -1,3 +1,5 @@
+#ifndef __Floor_h_
+#define __Floor_h_
 #include "BaseApplication.h"
 
 class Floor
@@ -16,3 +18,5 @@ private:
 	static const Ogre::String floorNames[5][5];
 	static const Ogre::String spotlightNames[5][5];
 };
+
+#endif

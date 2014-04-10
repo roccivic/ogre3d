@@ -1,3 +1,5 @@
+#ifndef __Player_h_
+#define __Player_h_
 #include "BaseApplication.h"
 
 class Player
@@ -30,3 +32,5 @@ private:
 	bool rotated;
 	bool updatePosition(int dir);
 };
+
+#endif

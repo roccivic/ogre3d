@@ -33,14 +33,14 @@ void OgreApp1::createViewports(void) {
 void OgreApp1::createScene(void) {
 	mSceneMgr->setSkyBox(true, "Examples/SpaceSkyBox", 5000, false);
     mSceneMgr->setAmbientLight(Ogre::ColourValue(0.4, 0.4, 0.4));
-    mSceneMgr->setShadowTechnique(Ogre::SHADOWTYPE_STENCIL_MODULATIVE);
+    mSceneMgr->setShadowTechnique(Ogre::SHADOWTYPE_STENCIL_ADDITIVE);
 
 	floor = new Floor(mSceneMgr);
 	floor->makeFloor();
 	player = new Player(mSceneMgr);
 	player->makePlayer();
 	mSceneMgr->getSceneNode("PlayerNode")->attachObject(mCamera2);
-	opponent = new Opponent(mSceneMgr);
+	opponent = new Opponent(mSceneMgr, player);
 	opponent->makeOpponent();
 }
 
