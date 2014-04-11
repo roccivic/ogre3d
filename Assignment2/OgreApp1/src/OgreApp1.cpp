@@ -2,7 +2,6 @@
 
 
 OgreApp1::OgreApp1(void) {
-	timerForSquares = 0.5;
 	panning = false;
 	switchCamera = false;
 }
@@ -52,19 +51,15 @@ bool OgreApp1::frameRenderingQueued(const Ogre::FrameEvent& evt) {
     bool ret = BaseApplication::frameRenderingQueued(evt);
 	player->tick(evt);
 	opponent->tick(evt);
+	floor->tick(evt);
 	mDetailsPanel->setParamValue(0, "Ninja");
 	mDetailsPanel->setParamValue(1, "Jaiqua");
 	mDetailsPanel->setParamValue(2, "Robot");
-	timerForSquares -= evt.timeSinceLastFrame;
-	if (timerForSquares < 0) {
-		timerForSquares = 0.5;
-		floor->updateLights();
-	}
     return ret;
 }
 
 // OIS::KeyListener
-bool OgreApp1::keyPressed( const OIS::KeyEvent& evt ) {
+bool OgreApp1::keyPressed(const OIS::KeyEvent& evt) {
     switch (evt.key) {
 		case OIS::KC_UP:
 		case OIS::KC_W:
@@ -105,23 +100,23 @@ bool OgreApp1::keyPressed( const OIS::KeyEvent& evt ) {
     return true;
 }
 
-bool OgreApp1::keyReleased( const OIS::KeyEvent& evt ) {
+bool OgreApp1::keyReleased(const OIS::KeyEvent& evt) {
 	return true;
 }
 
 // OIS::MouseListener
-bool OgreApp1::mouseMoved( const OIS::MouseEvent& evt ){
+bool OgreApp1::mouseMoved(const OIS::MouseEvent& evt) {
 	bool retval = true;
 	if (panning && ! switchCamera) {
 		retval = BaseApplication::mouseMoved(evt);
 	}
 	return retval;
 }
-bool OgreApp1::mousePressed( const OIS::MouseEvent& evt, OIS::MouseButtonID id ){
+bool OgreApp1::mousePressed(const OIS::MouseEvent& evt, OIS::MouseButtonID id) {
 	panning = true;
 	return true;
 }
-bool OgreApp1::mouseReleased( const OIS::MouseEvent& evt, OIS::MouseButtonID id ){
+bool OgreApp1::mouseReleased(const OIS::MouseEvent& evt, OIS::MouseButtonID id) {
 	panning = false;
 	return true;
 }

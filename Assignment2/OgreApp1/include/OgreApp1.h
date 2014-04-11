@@ -29,7 +29,6 @@ protected:
     virtual bool mousePressed( const OIS::MouseEvent& evt, OIS::MouseButtonID id );
     virtual bool mouseReleased( const OIS::MouseEvent& evt, OIS::MouseButtonID id );
 private:
-	Ogre::Real timerForSquares;
 	Floor* floor;
 	Player* player;
 	Opponent* opponent;

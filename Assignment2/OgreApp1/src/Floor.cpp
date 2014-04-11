@@ -17,6 +17,7 @@ const Ogre::String Floor::spotlightNames[5][5] = {
 
 Floor::Floor(Ogre::SceneManager* mSceneMgr) {
 	this->mSceneMgr = mSceneMgr;
+	timer = 0.5;
 }
  
 Floor::~Floor(void) {
@@ -72,6 +73,14 @@ void Floor::makePlane(const Ogre::String name, Ogre::Vector3 transVector, Ogre::
 	floorPiece->attachObject(entGround);
     entGround->setMaterialName(texture);
     entGround->setCastShadows(false);
+}
+
+void Floor::tick(const Ogre::FrameEvent& evt) {
+	timer -= evt.timeSinceLastFrame;
+	if (timer < 0) {
+		timer = 0.5;
+		this->updateLights();
+	}
 }
 
 void Floor::updateLights() {

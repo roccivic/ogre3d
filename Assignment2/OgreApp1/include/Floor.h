@@ -8,7 +8,7 @@ public:
     Floor(Ogre::SceneManager* mSceneMgr);
     ~Floor();
 	void makeFloor();
-	void updateLights();
+	void tick(const Ogre::FrameEvent& evt);
 
 private:
 	Ogre::SceneManager* mSceneMgr;
@@ -17,6 +17,8 @@ private:
 	Ogre::String getTexture(int x, int z);
 	static const Ogre::String floorNames[5][5];
 	static const Ogre::String spotlightNames[5][5];
+	Ogre::Real timer;
+	void updateLights();
 };
 
 #endif

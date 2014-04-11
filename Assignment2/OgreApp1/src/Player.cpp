@@ -110,6 +110,8 @@ void Player::tick(const Ogre::FrameEvent& evt) {
 		} else {
 			mPlayerNode->translate(mDirection * move);
 		}
+		mPlayerAnimation1->addTime(evt.timeSinceLastFrame);
+		mPlayerAnimation3->addTime(evt.timeSinceLastFrame);
 	}
 	mPlayerAnimation1->addTime(evt.timeSinceLastFrame);
 	mPlayerAnimation3->addTime(evt.timeSinceLastFrame);
