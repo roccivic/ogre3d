@@ -135,6 +135,7 @@ void BaseApplication::createFrameListener(void)
     items.push_back("1");
     items.push_back("2");
     items.push_back("3");
+    items.push_back("c");
 
     mDetailsPanel = mTrayMgr->createParamsPanel(OgreBites::TL_TOPRIGHT, "DetailsPanel", 200, items);
 

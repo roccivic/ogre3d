@@ -55,6 +55,7 @@ bool OgreApp1::frameRenderingQueued(const Ogre::FrameEvent& evt) {
 	mDetailsPanel->setParamValue(0, "Ninja");
 	mDetailsPanel->setParamValue(1, "Jaiqua");
 	mDetailsPanel->setParamValue(2, "Robot");
+	mDetailsPanel->setParamValue(3, "Change camera");
     return ret;
 }
 
