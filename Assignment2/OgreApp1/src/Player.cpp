@@ -133,14 +133,14 @@ bool Player::tick(const Ogre::FrameEvent& evt) {
  		mPlayerAnimation3 = mPlayer3->getAnimationState("Walk");
 		mPlayerAnimation3->setLoop(true);
 		mPlayerAnimation3->setEnabled(true);
-		mRotatingTarget -= 4.5;
+		mRotatingTarget -= 2.25;
 		if (mRotatingTarget < 0.0) {
 			mRotating = false;
 		} else {
 			if (mRotatingLeft) {
-				mPlayerNode->yaw(Ogre::Degree(4.5));
+				mPlayerNode->yaw(Ogre::Degree(2.25));
 			} else {
-				mPlayerNode->yaw(Ogre::Degree(-4.5));
+				mPlayerNode->yaw(Ogre::Degree(-2.25));
 			}
 		}
 		retval = true;
