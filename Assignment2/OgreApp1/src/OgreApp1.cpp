@@ -4,6 +4,7 @@
 OgreApp1::OgreApp1(void) {
 	panning = false;
 	switchCamera = false;
+	srand((unsigned) time(NULL));
 }
  
 OgreApp1::~OgreApp1(void) {
@@ -34,13 +35,13 @@ void OgreApp1::createScene(void) {
     mSceneMgr->setAmbientLight(Ogre::ColourValue(0.4, 0.4, 0.4));
     mSceneMgr->setShadowTechnique(Ogre::SHADOWTYPE_STENCIL_ADDITIVE);
 
-	floor = new Floor(mSceneMgr);
-	floor->makeFloor();
 	player = new Player(mSceneMgr);
 	player->makePlayer();
-	mSceneMgr->getSceneNode("PlayerNode")->attachObject(mCamera2);
+	floor = new Floor(mSceneMgr, player);
+	floor->makeFloor();
 	opponent = new Opponent(mSceneMgr, player);
 	opponent->makeOpponent();
+	mSceneMgr->getSceneNode("PlayerNode")->attachObject(mCamera2);
 }
 
 void OgreApp1::createFrameListener(void) {

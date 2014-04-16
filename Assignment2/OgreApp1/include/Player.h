@@ -1,6 +1,7 @@
 #ifndef __Player_h_
 #define __Player_h_
 #include "BaseApplication.h"
+#include "Direction.h"
 
 class Player
 {
@@ -17,6 +18,8 @@ public:
 	void character1();
 	void character2();
 	void character3();
+	void die();
+	bool isWalking();
 
 private:
 	int position[2];
@@ -38,6 +41,9 @@ private:
 	Ogre::Real mDistance;
     Ogre::Vector3 mDirection;
     Ogre::Vector3 mDestination;
+	bool dying;
+	Ogre::Real dyingProgress;
+	void reset();
 };
 
 #endif

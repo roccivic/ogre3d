@@ -1,5 +1,4 @@
 #include "Player.h"
-#include "Direction.h"
 
 Player::Player(Ogre::SceneManager* mSceneMgr) {
 	this->mSceneMgr = mSceneMgr;
@@ -7,11 +6,11 @@ Player::Player(Ogre::SceneManager* mSceneMgr) {
 	position[0] = 0;
 	position[1] = 0;
 	direction = Direction::NORTH;
-	
 	mRotating = false;
 	mRotatingLeft = false;
-
 	walking = false;
+	dying = false;
+	dyingProgress = 1.0;
 }
  
 Player::~Player(void) {
@@ -20,6 +19,32 @@ Player::~Player(void) {
 
 int* Player::getPosition() {
 	return position;
+}
+
+void Player::die() {
+	dying = true;
+}
+
+bool Player::isWalking() {
+	return walking;
+}
+
+void Player::reset() {
+	Ogre::String floorTileName = "N" + Ogre::StringConverter::toString(4-position[1]) + Ogre::StringConverter::toString(position[0]);
+	Ogre::SceneNode* floorTile = mSceneMgr->getSceneNode(floorTileName);
+	Ogre::Vector3 floorTilePos = floorTile->getPosition();
+	floorTilePos.y = 0;
+	floorTile->setPosition(floorTilePos);
+	mPlayerNode->setPosition(Ogre::Vector3(-400, 0, 400));
+
+	rotated = false;
+	position[0] = 0;
+	position[1] = 0;
+	mRotating = false;
+	mRotatingLeft = false;
+	walking = false;
+	dying = false;
+	dyingProgress = 1.0;
 }
 
 void Player::makePlayer() {
@@ -76,7 +101,16 @@ void Player::tick(const Ogre::FrameEvent& evt) {
 	mPlayerAnimation3->setLoop(true);
 	mPlayerAnimation3->setEnabled(true);
 
-	if (mRotating) {
+	if (dying) {
+		dyingProgress -= evt.timeSinceLastFrame;
+		Ogre::Real move = -1000 * evt.timeSinceLastFrame;
+		Ogre::String floorTileName = "N" + Ogre::StringConverter::toString(4-position[1]) + Ogre::StringConverter::toString(position[0]);
+		mSceneMgr->getSceneNode(floorTileName)->translate(Ogre::Vector3(0, move, 0));
+		mPlayerNode->translate(Ogre::Vector3(0, move, 0));
+		if (dyingProgress < 0.0) {
+			reset();
+		}
+	} else if (mRotating) {
 		mPlayerAnimation1 = mPlayer1->getAnimationState("Walk");
 		mPlayerAnimation1->setLoop(true);
 		mPlayerAnimation1->setEnabled(true);
@@ -118,7 +152,7 @@ void Player::tick(const Ogre::FrameEvent& evt) {
 }
 
 void Player::keyUp() {
-	if (! mRotating && ! walking) {
+	if (! mRotating && ! walking && ! dying) {
 		if (updatePosition(direction)) {
 			walking = true;
 			mDestination = Ogre::Vector3(position[0]*200-400, 0, -(position[1]*200-400));
@@ -128,7 +162,7 @@ void Player::keyUp() {
 }
 
 void Player::keyDown() {
-	if (! mRotating && ! walking) {
+	if (! mRotating && ! walking && ! dying) {
 		int dir = direction + 4;
 		if (dir > 7) {
 			dir -= 8;
@@ -142,7 +176,7 @@ void Player::keyDown() {
 }
 
 void Player::keyLeft() {
-	if (! mRotating && ! walking) {
+	if (! mRotating && ! walking && ! dying) {
 		mRotating = true;
 		mRotatingLeft = true;
 		direction--;
@@ -155,7 +189,7 @@ void Player::keyLeft() {
 }
 
 void Player::keyRight() {
-	if (! mRotating && ! walking) {
+	if (! mRotating && ! walking && ! dying) {
 		mRotating = true;
 		mRotatingLeft = false;
 		direction++;
@@ -202,19 +236,25 @@ bool Player::updatePosition(int dir) {
 }
 
 void Player::character1() {
-	mPlayer1->setVisible(true);
-	mPlayer2->setVisible(false);
-	mPlayer3->setVisible(false);
+	if (! dying) {
+		mPlayer1->setVisible(true);
+		mPlayer2->setVisible(false);
+		mPlayer3->setVisible(false);
+	}
 }
 
 void Player::character2() {
-	mPlayer1->setVisible(false);
-	mPlayer2->setVisible(true);
-	mPlayer3->setVisible(false);
+	if (! dying) {
+		mPlayer1->setVisible(false);
+		mPlayer2->setVisible(true);
+		mPlayer3->setVisible(false);
+	}
 }
 
 void Player::character3() {
-	mPlayer1->setVisible(false);
-	mPlayer2->setVisible(false);
-	mPlayer3->setVisible(true);
+	if (! dying) {
+		mPlayer1->setVisible(false);
+		mPlayer2->setVisible(false);
+		mPlayer3->setVisible(true);
+	}
 }

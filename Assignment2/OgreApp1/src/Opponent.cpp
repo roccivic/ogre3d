@@ -12,7 +12,7 @@ Opponent::Opponent(Ogre::SceneManager* mSceneMgr, Player* player) {
 	dying = false;
 	dead = false;
 }
- 
+
 Opponent::~Opponent(void) {
 
 }
