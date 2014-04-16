@@ -26,10 +26,17 @@ Floor::Floor(Ogre::SceneManager* mSceneMgr, Player* player) {
 	this->mSceneMgr = mSceneMgr;
 	this->player = player;
 	timer = 0.5;
+	spotlights = new bool*[5];
+	for (int i=0; i<5; i++) {
+		spotlights[i] = new bool[5];
+	}
 }
  
-Floor::~Floor(void) {
-
+Floor::~Floor() {
+	for (int i=0; i<5; i++) {
+		delete spotlights[i];
+	}
+	delete spotlights;
 }
 
 void Floor::makeFloor() {
@@ -92,10 +99,6 @@ void Floor::tick(const Ogre::FrameEvent& evt) {
 		timer = 0.5;
 		this->updateLights();
 	}
-	int* playerPos = player->getPosition();
-	if (spotlights[playerPos[0]][4-playerPos[1]] && ! player->isWalking()) {
-		player->die();
-	}
 }
 
 void Floor::updateLights() {
@@ -119,6 +122,10 @@ void Floor::updateLights() {
 			}
 		}
 	}
+}
+
+bool** Floor::getSpotlights() {
+	return spotlights;
 }
 
 Ogre::String Floor::getTexture(int x, int z) {

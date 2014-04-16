@@ -10,6 +10,7 @@ public:
     ~Floor();
 	void makeFloor();
 	void tick(const Ogre::FrameEvent& evt);
+	bool** getSpotlights();
 
 private:
 	Player* player;
@@ -22,7 +23,7 @@ private:
 	static const Ogre::String spotlightNames[5][5];
 	Ogre::Real timer;
 	void updateLights();
-	bool spotlights[5][5];
+	bool** spotlights;
 };
 
 #endif

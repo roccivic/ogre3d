@@ -129,7 +129,7 @@ void BaseApplication::createFrameListener(void)
     //mTrayMgr->showFrameStats(OgreBites::TL_BOTTOMLEFT);
     //mTrayMgr->showLogo(OgreBites::TL_BOTTOMRIGHT);
     mTrayMgr->hideCursor();
-
+	
     // create a params panel for displaying sample details
     Ogre::StringVector items;
     items.push_back("1");
@@ -138,6 +138,13 @@ void BaseApplication::createFrameListener(void)
     items.push_back("c");
 
     mDetailsPanel = mTrayMgr->createParamsPanel(OgreBites::TL_TOPRIGHT, "DetailsPanel", 200, items);
+
+    // create a params panel for displaying sample details
+    Ogre::StringVector items2;
+    items2.push_back("Score");
+    items2.push_back("Best Score");
+
+    mScorePanel = mTrayMgr->createParamsPanel(OgreBites::TL_TOPLEFT, "ScorePanel", 200, items2);
 
     mRoot->addFrameListener(this);
 }

@@ -14,7 +14,8 @@ class OgreApp1 : public BaseApplication
 public:
     OgreApp1(void);
     virtual ~OgreApp1(void);
-
+	int score;
+	int bestScore;
 protected:
 	virtual void createScene(void);
 	virtual void createCamera(void);

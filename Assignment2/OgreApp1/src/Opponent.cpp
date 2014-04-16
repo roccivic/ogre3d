@@ -10,11 +10,23 @@ Opponent::Opponent(Ogre::SceneManager* mSceneMgr, Player* player) {
 	mRotating1 = false;
 	mRotating2 = false;
 	dying = false;
-	dead = false;
 }
 
-Opponent::~Opponent(void) {
+Opponent::~Opponent() {
 
+}
+
+void Opponent::reset() {
+	position[0] = 4;
+	position[1] = 4;
+	timer = 5.0;
+	busy = false;
+	mRotating1 = false;
+	mRotating2 = false;
+	dying = false;
+	mOpponentNode->setPosition(Ogre::Vector3(400, 25, -400));
+	mOpponentNode->setScale(20, 20, 20);
+	lookAtOrigin();
 }
 
 int* Opponent::getPosition() {
@@ -40,10 +52,13 @@ void Opponent::makeOpponent() {
 	lookAtOrigin();
 }
 
-void Opponent::tick(const Ogre::FrameEvent& evt) {
-	if (dead) {
-		return;
-	}
+void Opponent::die() {
+	dying = true;
+	dyingProgress = 50;
+}
+
+bool Opponent::tick(const Ogre::FrameEvent& evt) {
+	bool retval = false;
  	mOpponentAnimation = mOpponent->getAnimationState("swim");
     mOpponentAnimation->setLoop(true);
     mOpponentAnimation->setEnabled(true);
@@ -91,22 +106,17 @@ void Opponent::tick(const Ogre::FrameEvent& evt) {
 				mOpponentNode->translate(mDirection * move);
 			}
 		}
+		retval = true;
 	} else if (dying) {
 		dyingProgress--;
 		if (dyingProgress == 0) {
-			dying = false;
-			dead = true;
-			mOpponentNode->setVisible(false);
+			reset();
 		} else {
 			mOpponentNode->scale(0.8,0.8,0.8);
 		}
-	} else {
-		int* playerPos = player->getPosition();
-		if (playerPos[0] == position[0] && playerPos[1] == position[1]) {
-			dying = true;
-			dyingProgress = 50;
-		}
+		retval = true;
 	}
+	return retval;
 }
 
 void Opponent::lookAtOrigin() {
@@ -118,7 +128,7 @@ void Opponent::lookAtOrigin() {
 }
 
 void Opponent::move() {
-	if (! busy && ! dying && ! dead) {
+	if (! busy && ! dying) {
 		busy = true;
 		int position1[2];
 		int position2[2];

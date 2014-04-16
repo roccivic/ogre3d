@@ -5,6 +5,8 @@ OgreApp1::OgreApp1(void) {
 	panning = false;
 	switchCamera = false;
 	srand((unsigned) time(NULL));
+	score = 0;
+	bestScore = 0;
 }
  
 OgreApp1::~OgreApp1(void) {
@@ -50,13 +52,30 @@ void OgreApp1::createFrameListener(void) {
 
 bool OgreApp1::frameRenderingQueued(const Ogre::FrameEvent& evt) {
     bool ret = BaseApplication::frameRenderingQueued(evt);
-	player->tick(evt);
-	opponent->tick(evt);
+	bool playerBusy = player->tick(evt);
+	bool opponentBusy = opponent->tick(evt);
 	floor->tick(evt);
+	int* playerPos = player->getPosition();
+	int* opponentPos = opponent->getPosition();
+	if (playerPos[0] == opponentPos[0] && playerPos[1] == opponentPos[1] && ! playerBusy && ! opponentBusy) {
+		opponent->die();
+		score++;
+	}
+	bool** spotlights = floor->getSpotlights();
+	if (spotlights[playerPos[0]][4-playerPos[1]] && ! player->isWalking()) {
+		player->die();
+		if (score > bestScore) {
+			bestScore = score;
+		}
+		score = 0;
+	}
+
 	mDetailsPanel->setParamValue(0, "Ninja");
 	mDetailsPanel->setParamValue(1, "Jaiqua");
 	mDetailsPanel->setParamValue(2, "Robot");
 	mDetailsPanel->setParamValue(3, "Change camera");
+	mScorePanel->setParamValue(0, Ogre::StringConverter::toString(score));
+	mScorePanel->setParamValue(1, Ogre::StringConverter::toString(bestScore));
     return ret;
 }
 

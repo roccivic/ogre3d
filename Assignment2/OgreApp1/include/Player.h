@@ -10,7 +10,7 @@ public:
     ~Player();
 	int* getPosition();
 	void makePlayer();
-	void tick(const Ogre::FrameEvent& evt);
+	bool tick(const Ogre::FrameEvent& evt);
 	void keyUp();
 	void keyDown();
 	void keyLeft();

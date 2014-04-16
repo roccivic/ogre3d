@@ -13,7 +13,7 @@ Player::Player(Ogre::SceneManager* mSceneMgr) {
 	dyingProgress = 1.0;
 }
  
-Player::~Player(void) {
+Player::~Player() {
 
 }
 
@@ -93,7 +93,8 @@ void Player::makePlayer() {
     mPlayerAnimation3->setEnabled(true);
 }
 
-void Player::tick(const Ogre::FrameEvent& evt) {
+bool Player::tick(const Ogre::FrameEvent& evt) {
+	bool retval = false;
 	mPlayerAnimation1 = mPlayer1->getAnimationState("Idle2");
 	mPlayerAnimation1->setLoop(true);
 	mPlayerAnimation1->setEnabled(true);
@@ -110,6 +111,7 @@ void Player::tick(const Ogre::FrameEvent& evt) {
 		if (dyingProgress < 0.0) {
 			reset();
 		}
+		retval = true;
 	} else if (mRotating) {
 		mPlayerAnimation1 = mPlayer1->getAnimationState("Walk");
 		mPlayerAnimation1->setLoop(true);
@@ -127,6 +129,7 @@ void Player::tick(const Ogre::FrameEvent& evt) {
 				mPlayerNode->yaw(Ogre::Degree(-4.5));
 			}
 		}
+		retval = true;
 	} else if (walking) {
 		mPlayerAnimation1 = mPlayer1->getAnimationState("Walk");
 		mPlayerAnimation1->setLoop(true);
@@ -146,9 +149,11 @@ void Player::tick(const Ogre::FrameEvent& evt) {
 		}
 		mPlayerAnimation1->addTime(evt.timeSinceLastFrame);
 		mPlayerAnimation3->addTime(evt.timeSinceLastFrame);
+		retval = true;
 	}
 	mPlayerAnimation1->addTime(evt.timeSinceLastFrame);
 	mPlayerAnimation3->addTime(evt.timeSinceLastFrame);
+	return retval;
 }
 
 void Player::keyUp() {

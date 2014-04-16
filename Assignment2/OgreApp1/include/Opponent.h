@@ -10,7 +10,8 @@ public:
     ~Opponent();
 	int* getPosition();
 	void makeOpponent();
-	void tick(const Ogre::FrameEvent& evt);
+	bool tick(const Ogre::FrameEvent& evt);
+	void die();
 
 private:
 	Player* player;
@@ -35,7 +36,7 @@ private:
 	bool mRotating2;
 	bool dying;
 	int dyingProgress;
-	bool dead;
+	void reset();
 };
 
 #endif
