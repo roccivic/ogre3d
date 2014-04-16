@@ -116,17 +116,7 @@ bool Player::tick(const Ogre::FrameEvent& evt) {
 	mPlayerAnimation3->setLoop(true);
 	mPlayerAnimation3->setEnabled(true);
 
-	if (dying) {
-		dyingProgress -= evt.timeSinceLastFrame;
-		Ogre::Real move = -1000 * evt.timeSinceLastFrame;
-		Ogre::String floorTileName = "N" + Ogre::StringConverter::toString(4-position[1]) + Ogre::StringConverter::toString(position[0]);
-		mSceneMgr->getSceneNode(floorTileName)->translate(Ogre::Vector3(0, move, 0));
-		mPlayerNode->translate(Ogre::Vector3(0, move, 0));
-		if (dyingProgress < 0.0) {
-			reset();
-		}
-		retval = true;
-	} else if (mRotating) {
+	if (mRotating) {
 		mPlayerAnimation1 = mPlayer1->getAnimationState("Walk");
 		mPlayerAnimation1->setLoop(true);
 		mPlayerAnimation1->setEnabled(true);
@@ -142,6 +132,16 @@ bool Player::tick(const Ogre::FrameEvent& evt) {
 			} else {
 				mPlayerNode->yaw(Ogre::Degree(-2.25));
 			}
+		}
+		retval = true;
+	} else if (dying) {
+		dyingProgress -= evt.timeSinceLastFrame;
+		Ogre::Real move = -1000 * evt.timeSinceLastFrame;
+		Ogre::String floorTileName = "N" + Ogre::StringConverter::toString(4-position[1]) + Ogre::StringConverter::toString(position[0]);
+		mSceneMgr->getSceneNode(floorTileName)->translate(Ogre::Vector3(0, move, 0));
+		mPlayerNode->translate(Ogre::Vector3(0, move, 0));
+		if (dyingProgress < 0.0) {
+			reset();
 		}
 		retval = true;
 	} else if (walking) {
