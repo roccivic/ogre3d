@@ -11,6 +11,7 @@ Player::Player(Ogre::SceneManager* mSceneMgr) {
 	walking = false;
 	dying = false;
 	dyingProgress = 1.0;
+	nextKey = 0;
 }
  
 Player::~Player() {
@@ -45,6 +46,7 @@ void Player::reset() {
 	walking = false;
 	dying = false;
 	dyingProgress = 1.0;
+	nextKey = 0;
 }
 
 void Player::makePlayer() {
@@ -94,6 +96,18 @@ void Player::makePlayer() {
 }
 
 bool Player::tick(const Ogre::FrameEvent& evt) {
+	if (! mRotating && ! walking && ! dying && nextKey != 0) {
+		if (nextKey == 1) {
+			this->keyUp();
+		} else if (nextKey == 2) {
+			this->keyDown();
+		} else if (nextKey == 3) {
+			this->keyLeft();
+		} else if (nextKey == 4) {
+			this->keyRight();
+		} 
+		nextKey = 0;
+	}
 	bool retval = false;
 	mPlayerAnimation1 = mPlayer1->getAnimationState("Idle2");
 	mPlayerAnimation1->setLoop(true);
@@ -163,6 +177,8 @@ void Player::keyUp() {
 			mDestination = Ogre::Vector3(position[0]*200-400, 0, -(position[1]*200-400));
 			mDirection = mDestination - mPlayerNode->getPosition();
 		}
+	} else {
+		nextKey = 1;
 	}
 }
 
@@ -177,6 +193,8 @@ void Player::keyDown() {
 			mDestination = Ogre::Vector3(position[0]*200-400, 0, -(position[1]*200-400));
 			mDirection = mDestination - mPlayerNode->getPosition();
 		}
+	} else {
+		nextKey = 2;
 	}
 }
 
@@ -190,6 +208,8 @@ void Player::keyLeft() {
 		}
 		rotated = !rotated;
 		mRotatingTarget = 45.0;
+	} else {
+		nextKey = 3;
 	}
 }
 
@@ -203,6 +223,8 @@ void Player::keyRight() {
 		}
 		rotated = !rotated;
 		mRotatingTarget = 45.0;
+	} else {
+		nextKey = 4;
 	}
 }
 

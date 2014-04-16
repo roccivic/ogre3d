@@ -22,6 +22,7 @@ public:
 	bool isWalking();
 
 private:
+	int nextKey;
 	int position[2];
 	int direction;
 	Ogre::SceneManager* mSceneMgr;
