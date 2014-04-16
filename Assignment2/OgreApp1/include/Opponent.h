@@ -35,7 +35,7 @@ private:
 	bool mRotating1;
 	bool mRotating2;
 	bool dying;
-	int dyingProgress;
+	Ogre::Real dyingProgress;
 	void reset();
 };
 

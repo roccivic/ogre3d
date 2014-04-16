@@ -54,7 +54,7 @@ void Opponent::makeOpponent() {
 
 void Opponent::die() {
 	dying = true;
-	dyingProgress = 50;
+	dyingProgress = 0.5;
 }
 
 bool Opponent::tick(const Ogre::FrameEvent& evt) {
@@ -108,8 +108,8 @@ bool Opponent::tick(const Ogre::FrameEvent& evt) {
 		}
 		retval = true;
 	} else if (dying) {
-		dyingProgress--;
-		if (dyingProgress == 0) {
+		dyingProgress -= evt.timeSinceLastFrame;
+		if (dyingProgress < 0) {
 			reset();
 		} else {
 			mOpponentNode->scale(0.8,0.8,0.8);
